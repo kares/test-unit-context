@@ -44,6 +44,14 @@ module Test
       def context(name, &block)
         klass = Class.new(self)
         klass.context_name = name
+        # NOTE: make sure by default we run "inherited" setup/teardown hooks
+        # unless context code does re-define the hook method e.g. `def setup` 
+        # instead of using the `setup do` or the setup method marker syntax :
+        klass.class_eval do
+          def setup; super; end
+          def cleanup; super; end
+          def teardown; super; end
+        end
         klass.class_eval(&block)
 
         #@@context_list << klass # make sure it's not GC-ed ?!
