@@ -7,12 +7,17 @@ module Test::Unit::Context
       #%w(shared_behavior share_as share_behavior_as shared_examples_for).each do |method_alias|
         #assert self.class.respond_to?(method_alias.to_sym)
       #end
+      assert self.class.respond_to?(:shared)
+      assert self.class.respond_to?(:share_as)
     end
 
-    def test_use_aliases
+    def test_like_aliases
       #%w(uses it_should_behave_like behaves_like uses_examples_from).each do |method_alias|
         #assert self.class.respond_to?(method_alias.to_sym)
       #end
+      assert self.class.respond_to? :like
+      assert self.class.respond_to? :use
+      assert self.class.respond_to? :uses
     end
 
     class << self; alias_method :it, :test; end
@@ -83,9 +88,6 @@ module Test::Unit::Context
 
       context "should include its shared behavior" do
         shared "Athos" do
-          
-          puts "Athos: #{self.name}"
-          
           test "en_garde" do
             true
           end
