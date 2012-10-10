@@ -52,7 +52,7 @@ module Test
         klass
       end
 
-      %w( contexts describe describes group ).each { |m| alias_method m, :context }
+      %w( contexts group ).each { |m| alias_method m, :context }
       
       #@@context_list = []
       
