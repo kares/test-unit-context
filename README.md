@@ -1,5 +1,7 @@
 # Test::Unit::Context
 
+[![Build Status][0]](http://travis-ci.org/kares/test-unit-context)
+
 Makes `Test::Unit::TestCase` 'context-able' and thus (subjectively - hopefully) 
 much easier to read and write. If you have ever seen RSpec than it's the very 
 same *context do ... end* re-invented for **Test::Unit**. 
@@ -96,3 +98,5 @@ end
 
 Copyright (c) 2012 [Karol Bucek](https://github.com/kares). 
 See LICENSE (http://www.apache.org/licenses/LICENSE-2.0) for details.
+
+[0]: https://secure.travis-ci.org/kares/test-unit-context.png
