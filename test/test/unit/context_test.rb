@@ -43,10 +43,10 @@ module Test::Unit
       assert_equal Default, @default_context.superclass
     end
     
-    test "[default context] reports among test case's context list" do
-      assert Default.respond_to?(:context_list)
-      assert_include Default.context_list, @default_context
-      assert_equal 2, Default.context_list.size
+    test "[default context] reports among test case's context defs" do
+      assert Default.respond_to?(:context_definitions)
+      assert_include Default.context_definitions, @default_context
+      assert_equal 2, Default.context_definitions.size
     end
     
     test "has a (context name derived) class name" do
@@ -81,10 +81,11 @@ module Test::Unit
       assert_equal Anonymous, @anonymous_context.superclass
     end
     
-    test "[anonymous context] reports among test case's context list" do
-      assert Anonymous.respond_to?(:context_list)
-      assert_include Anonymous.context_list, @anonymous_context
-      assert_equal 3, Anonymous.context_list.size
+    test "[anonymous context] reports among test case's context defs" do
+      assert Anonymous.respond_to?(:context_definitions)
+      assert_include Anonymous.context_definitions, @anonymous_context
+      assert_equal 3, Anonymous.context_definitions.size
+      assert_equal 3, Anonymous.context_definitions(true).size
     end
     
     test "[anonymous context] has a (context name derived) class name" do
@@ -95,12 +96,12 @@ module Test::Unit
     
     class Nested < Test::Unit::TestCase
       CONTEXT = context "and we're testing" do
-        def self.nested; @nested; end
         @nested = context "should be nested" do
           def test_a_thing
             true
           end
         end
+        def self.nested; @nested; end
       end
     end
 
@@ -121,11 +122,12 @@ module Test::Unit
       assert_equal @parent_context, @nested_context.superclass
     end
     
-    test "[nested context] reports context list correctly" do
-      assert Nested.respond_to?(:context_list)
-      assert_equal 1, Nested.context_list.size
-      assert_equal 1, @parent_context.context_list.size
-      assert_equal 0, @nested_context.context_list.size
+    test "[nested context] reports context defs correctly" do
+      assert Nested.respond_to?(:context_definitions)
+      assert_equal 1, Nested.context_definitions.size
+      assert_equal 1, @parent_context.context_definitions.size
+      assert_equal 0, @nested_context.context_definitions.size
+      assert_equal 2, Nested.context_definitions(true).size
     end
     
     test "[nested context] has a (context name derived) class name" do

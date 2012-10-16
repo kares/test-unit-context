@@ -24,28 +24,30 @@ module Test::Unit::Context
     
     context "A shared group" do
       context "creates a module" do
+        
         test "based on a string name" do
           self.class.shared "things and fun" do
           end
 
-          assert Object.const_get(:ThingsAndFun)
-          assert_equal Shared::Behavior, Object.const_get(:ThingsAndFun).class
+          assert Shared::Behavior.const_defined?(:ThingsAndFun)
+          assert_instance_of Shared::Behavior, Shared::Behavior.const_get(:ThingsAndFun)
         end
 
-        it "based on a symbol name" do
+        test "based on a symbol name" do
           self.class.shared :fun_and_games do
           end
 
-          assert Object.const_get(:FunAndGames)
-          assert_equal Shared::Behavior, Object.const_get(:FunAndGames).class
+          assert Shared::Behavior.const_defined?(:FunAndGames)
+          assert_instance_of Shared::Behavior, Shared::Behavior.const_get(:FunAndGames)
         end
 
-        it "unless the name is not a String or Symbol" do
+        test "unless the name is not a String or Symbol" do
           assert_raise ArgumentError do
-            self.class.shared StandardError do
+            self.class.shared 42 do
             end
           end
         end
+        
       end
 
       context "should be locatable" do      
@@ -82,6 +84,12 @@ module Test::Unit::Context
         it "by direct reference" do
           assert_nothing_raised do
             self.class.use HiDog
+          end
+        end
+        
+        it "by behavior reference" do
+          assert_nothing_raised do
+            self.class.use Shared::Behavior::HiDog
           end
         end
       end
@@ -134,6 +142,18 @@ module Test::Unit::Context
         end
         
       end
+      
+      test "locates all shared behaviors with their names" do
+        assert_not_nil shareds = self.class.shared_definitions
+        assert shareds.size >= 4, shareds.inspect
+        assert_include shareds, Test::Unit::Context::Shared::Behavior::HiDog
+        assert_equal 'hi dog', Test::Unit::Context::Shared::Behavior::HiDog.shared_name
+        [ :Athos, :Porthos, :Aramis ].each do |name|
+          assert_include shareds, behavior = self.class.const_get(name)
+          assert_equal name.to_s, behavior.shared_name
+        end
+      end
+      
     end
   end
 end

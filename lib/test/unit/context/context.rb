@@ -33,9 +33,9 @@ module Test::Unit::Context
     # never get merged (a unique name is generated for each such context).
     #
     def context(name = nil, &block)
-      name ||= (Time.now.to_f * 1000).to_i
+      name ||= Helpers.generate_uuid
       # context "created with defaults" ... 'ContextCreatedWithDefaults'
-      class_name = "Context#{Helpers.to_class_name(name.to_s)}"
+      class_name = Helpers.to_const_name(name.to_s, 'Context')
       if const_defined?(class_name)
         klass = const_get(class_name)
         if ( klass.superclass == self rescue nil )
@@ -60,16 +60,25 @@ module Test::Unit::Context
           def teardown; super; end
         end
         const_set(class_name, klass)
-        self.context_list << klass
       end
+      context_definitions << klass
       klass.class_eval(&block)
       klass
     end
 
     %w( contexts group ).each { |m| alias_method m, :context }
-
-    def context_list
-      @context_list ||= []
+    
+    def context_definitions(nested = false)
+      @_context_definitions ||= []
+      if nested
+        contexts = @_context_definitions.dup
+        @_context_definitions.each do |context|
+          contexts.push *context.context_definitions(nested)
+        end
+        contexts
+      else
+        @_context_definitions
+      end
     end
 
   end

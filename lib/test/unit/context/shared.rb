@@ -33,8 +33,30 @@ module Test::Unit::Context
         raise ArgumentError, "use a String or Symbol as the name e.g. " + 
                              "`shared #{name.to_s.inspect} do ...`"  
       end
-      module_name = Helpers.to_module_name(name.to_s)
-      Object.const_set(module_name, Behavior.create(block))
+      const_name = Helpers.to_const_name(name.to_s)
+      if Behavior.const_defined?(const_name)
+        const = Behavior.const_get(const_name)
+        if Behavior === const
+          raise "duplicate shared definition with the name #{name.inspect} " <<
+                 "found at #{caller.first} please provide an unique name"
+        else
+          raise "could not create a shared definition with the name " << 
+                "#{name.inspect} as a constant #{Behavior.name}::#{const_name} " <<
+                "already exists"
+        end
+      else
+        behavior = Behavior.new(name, block)
+        Behavior.const_set(const_name, behavior)
+        # expose at current top-level test-case as a constant as well :
+        test_case = self
+        while test_case.is_a?(Test::Unit::Context)
+          test_case = test_case.superclass
+        end
+        unless test_case.const_defined?(const_name)
+          test_case.const_set(const_name, behavior)
+        end
+        behavior
+      end
     end
     
     %w( share_as ).each { |m| alias_method m, :shared }
@@ -59,13 +81,20 @@ module Test::Unit::Context
     #
     def like(shared_name)
       case shared_name
-      when String
-        module_name = Helpers.to_module_name(shared_name)
-        include Object.const_get(module_name)
-      when Symbol
-        module_name = Helpers.to_module_name(shared_name.to_s)
-        include Object.const_get(module_name)
-      when Module, Behavior
+      when String, Symbol
+        const_name = Helpers.to_const_name(shared_name.to_s)
+        if Behavior.const_defined?(const_name)
+          const = Behavior.const_get(const_name)
+          if Behavior === const
+            include const
+          else
+            raise "#{shared_name.inspect} does not resolve into a shared " << 
+                   "behavior instance but to a #{const.inspect}"
+          end
+        else
+          raise "shared behavior with name #{shared_name.inspect} not defined"
+        end
+      when Behavior, Module
         include shared_name
       else
         raise ArgumentError, "pass a String or Symbol as the name e.g. " +
@@ -75,14 +104,25 @@ module Test::Unit::Context
     
     %w( like_a use uses ).each { |m| alias_method m, :like }
     
-    class Behavior < Module
-
-      def self.create(block) # :nodoc:
-        self.new(block)
+    # Returns all available shared definitions.
+    def shared_definitions
+      shareds = []
+      constants.each do |name|
+        const = const_get(name)
+        if const.is_a?(Behavior)
+          shareds << const
+        end
       end
-
-      def initialize(block)
+      shareds
+    end
+    
+    class Behavior < Module
+      
+      attr_reader :shared_name
+      
+      def initialize(name, block)
         super()
+        @shared_name = name
         @_block = block
       end
 
