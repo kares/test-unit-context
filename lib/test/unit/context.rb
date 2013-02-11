@@ -24,3 +24,6 @@ require 'test/unit/context/context'
 Test::Unit::TestCase.extend Test::Unit::Context::Context
 require 'test/unit/context/shared'
 Test::Unit::TestCase.extend Test::Unit::Context::Shared
+
+# NOTE: this pollutes it's left to the user to load it :
+# require 'test/unit/context/spec'

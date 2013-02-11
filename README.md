@@ -94,6 +94,27 @@ end
 
 ```
 
+### Spec Mode
+
+```ruby
+require 'test/unit/context/spec'
+
+describe ChuckNorris, '#fart' do
+
+  setup do
+    @subject = ChuckNorris.new
+    @subject.fart
+  end
+
+  it "creates a parallel universe" do
+    assert Object.const_defined?(:Universe)
+    assert_equal @subject, Universe.instance
+    assert_empty ObjectSpace.each_object(Universe).to_a
+  end
+
+end
+```
+
 ## Copyright
 
 Copyright (c) 2012 [Karol Bucek](https://github.com/kares). 
