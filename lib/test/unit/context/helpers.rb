@@ -1,14 +1,18 @@
+require 'time'
+
 module Test::Unit::Context
   module Helpers
     
     module_function
     
-    def to_const_name(str, prefix = nil)
-      name = prefix ? str.dup : str.lstrip
+    def to_const_name(str, prefix = nil, suffix = nil)
+      name = str.dup
+      name.lstrip! if prefix
+      name.rstrip! if suffix
       name.gsub!(/[\s:',\.~;!#=\(\)&]+/, '_')
       name.gsub!(/\/(.?)/) { $1.upcase }
       name.gsub!(/(?:^|_)(.)/) { $1.upcase }
-      prefix ? "#{prefix}#{name}" : name
+      "#{prefix}#{name}#{suffix}"
     end
     
     def generate_uuid

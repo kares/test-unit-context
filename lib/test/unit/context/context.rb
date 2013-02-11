@@ -1,12 +1,13 @@
-require 'time'
-
 module Test::Unit::Context
   module Context
 
+    PREFIX = 'Context'.freeze # :nodoc:
+    SUFFIX = nil # :nodoc:
+    
     # Add a context to a set of tests.
     # 
     #   context "A new account" do
-    #     test "does not have users"
+    #     test "does not have users" do
     #       assert Account.new.users.empty?
     #     end
     #   end
@@ -35,7 +36,7 @@ module Test::Unit::Context
     def context(name = nil, &block)
       name ||= Helpers.generate_uuid
       # context "created with defaults" ... 'ContextCreatedWithDefaults'
-      class_name = Helpers.to_const_name(name.to_s, 'Context')
+      class_name = Helpers.to_const_name(name.to_s, PREFIX, SUFFIX)
       if const_defined?(class_name)
         klass = const_get(class_name)
         if ( klass.superclass == self rescue nil )

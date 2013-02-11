@@ -3,7 +3,7 @@ module Test::Unit::Context
     
     # Share behavior among different contexts.
     # This creates a module (actually, a Module subclass) that is included 
-    # using the +use+ method (or one of its aliases) provided by context (or 
+    # using the +like+ method (or one of its aliases) provided by context (or 
     # +include+ if you know the module's constant name).
     #
     # ==== Examples
