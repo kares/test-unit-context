@@ -145,7 +145,6 @@ module Test::Unit
       @@warns = nil
       def self.warn(message)
         ( @@warns ||= [] ) << message
-        super
       end
       def self.warns; @@warns; end
       def self.reset_warns; @@warns = nil; end

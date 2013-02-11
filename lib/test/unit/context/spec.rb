@@ -7,12 +7,12 @@ module Test::Unit::Context
     # Spec style Test::Unit::TestCase (sub-classes) :
     # 
     #   describe User do
-    #     it "does not have users" do
-    #       assert Account.new.users.empty?
+    #     it "creates a new instance" do
+    #       assert_nothing_raised { User.new }
     #     end
     #   end
     # 
-    # You do need to `require 'test/unit/context/spec'` first (in your helper).
+    # You need to `require 'test/unit/context/spec'` ( e.g. in test_helper.rb).
     #
     # The generated Test::Unit::TestCase sub-class follows the "Test" suffix 
     # naming convention e.g. `describe User` ends up as `UserTest < TestCase`.
@@ -38,7 +38,7 @@ module Test::Unit::Context
         #klass = Class.new is_test_case ? self_klass : Test::Unit::TestCase
         klass = Class.new(Test::Unit::TestCase)
         klass.send(:define_method, :name) { name }
-        klass.extend Test::Unit::Context::Spec::Methods
+        klass.extend Methods
         self_klass.const_set(class_name, klass)
       end
       klass.class_eval(&block)
@@ -47,6 +47,8 @@ module Test::Unit::Context
     
     module Methods
       
+      # It is an alias for Test::Unit's test method.
+      # @see Test::Unit::TestCase#test
       def it(*args, &block); test(*args, &block); end
       
     end
