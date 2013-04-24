@@ -16,6 +16,14 @@ module Test::Unit
       assert self.class.respond_to? :contexts
     end
 
+    def test_context_naming
+      Class.new(Test::Unit::TestCase) do
+        context("kiss = simple_name") {}
+        context("a_(not-so)_simple; name") {}
+        context("an '&\" name !?") {}
+      end
+    end
+    
     class Default < Test::Unit::TestCase
       CONTEXT = context "When testing" do
         def test_this_thing

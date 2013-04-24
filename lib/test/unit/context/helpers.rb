@@ -3,13 +3,15 @@ require 'time'
 module Test::Unit::Context
   module Helpers
     
+    CONST_NAME_SUB_ = /[\s:\-'",\.~;!?#=\(\)&]+/ # :nodoc:
+    
     module_function
     
     def to_const_name(str, prefix = nil, suffix = nil)
       name = str.dup
       name.lstrip! if prefix
       name.rstrip! if suffix
-      name.gsub!(/[\s:',\.~;!#=\(\)&]+/, '_')
+      name.gsub!(CONST_NAME_SUB_, '_')
       name.gsub!(/\/(.?)/) { $1.upcase }
       name.gsub!(/(?:^|_)(.)/) { $1.upcase }
       "#{prefix}#{name}#{suffix}"
