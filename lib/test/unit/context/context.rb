@@ -74,7 +74,7 @@ module Test::Unit::Context
       if nested
         contexts = @_context_definitions.dup
         @_context_definitions.each do |context|
-          contexts.push *context.context_definitions(nested)
+          contexts.concat context.context_definitions(nested)
         end
         contexts
       else
