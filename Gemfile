@@ -1,3 +1,7 @@
 source 'https://rubygems.org'
-# Specify your gem's dependencies in test-unit-context.gemspec
+
 gemspec
+
+if path = ENV['test-unit']
+  gem 'test-unit', :path => path
+end
