@@ -2,17 +2,18 @@ language: ruby
 rvm:
   - 1.8.7
   - 1.9.3
-  - 2.1.5
-  - jruby-1.6.8
-  - jruby-1.7.16
+  - 2.2.3
+  #- jruby-1.6.8
+  - jruby-1.7.22
+  - jruby-9.0.3.0
 jdk:
   - openjdk7
 env:
-  - TEST_UNIT="~> 2.5.5"
-  - TEST_UNIT="~> 3.0.9"
+  - TEST_UNIT="~> 2.5"
+  - TEST_UNIT="~> 3.0"
 matrix:
   exclude:
     - rvm: 1.8.7
-      env: TEST_UNIT="~> 3.0.9"
-    - rvm: jruby-1.6.8
-      env: TEST_UNIT="~> 3.0.9"
+      env: TEST_UNIT="~> 3.0"
+    #- rvm: jruby-1.6.8
+    #  env: TEST_UNIT="~> 3.0"
