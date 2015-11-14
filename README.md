@@ -25,7 +25,6 @@ Or install it yourself, if you're not using Bundler :
 ## Usage
 
 ```ruby
-# NOTE: do not run try running this at home!
 class ChuckNorrisTest < Test::Unit::TestCase
 
   setup do
@@ -91,7 +90,6 @@ class ChuckNorrisTest < Test::Unit::TestCase
   end
 
 end
-
 ```
 
 ### Spec Mode
@@ -113,11 +111,12 @@ describe ChuckNorris, '#fart' do
   end
 
 end
+# NOTE: do not try running this at home!
 ```
 
 ## Copyright
 
-Copyright (c) 2012 [Karol Bucek](https://github.com/kares). 
+Copyright (c) 2015 [Karol Bucek](https://github.com/kares). 
 See LICENSE (http://www.apache.org/licenses/LICENSE-2.0) for details.
 
 [0]: https://secure.travis-ci.org/kares/test-unit-context.png
