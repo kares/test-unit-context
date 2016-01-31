@@ -40,12 +40,12 @@ module Test::Unit::Context
       if const_defined?(class_name)
         klass = const_get(class_name)
         if ( klass.superclass == self rescue nil )
-          warn "duplicate context definition with the name #{name.inspect} " <<
-                "found at #{caller.first} it is going to be merged with " <<
+          warn "duplicate context definition with the name #{name.inspect} " +
+                "found at #{caller.first} it is going to be merged with " +
                 "the previous context definition"
         else
-          raise "could not create a context with the name #{name.inspect} " <<
-                "as a constant #{class_name} is already defined and is not " <<
+          raise "could not create a context with the name #{name.inspect} " +
+                "as a constant #{class_name} is already defined and is not " +
                 "another context definition"
         end
       else
