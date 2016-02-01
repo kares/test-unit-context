@@ -2,11 +2,11 @@
 
 [![Build Status][0]](http://travis-ci.org/kares/test-unit-context)
 
-Makes `Test::Unit::TestCase` 'context-able' and thus (subjectively - hopefully) 
-much easier to read and write. If you have ever seen RSpec than it's the very 
-same *context do ... end* re-invented for **Test::Unit**. 
+Makes `Test::Unit::TestCase` 'context-able' and thus (subjectively - hopefully)
+much easier to read and write. If you have ever seen RSpec than it's the very
+same *context do ... end* re-invented for **Test::Unit**.
 
-Inspired by [gem 'context'](https://github.com/jm/context) that does the same 
+Inspired by [gem 'context'](https://github.com/jm/context) that does the same
 for the good 'old' test-unit 1.2.3 bundled with Ruby 1.8.x standard libraries.
 
 ## Installation
@@ -75,7 +75,7 @@ class ChuckNorrisTest < Test::Unit::TestCase
   uses 'elementary math facts'
 
   context 'cloned' do
-    
+
     setup do
       @subject = @subject.clone
     end
@@ -116,7 +116,7 @@ end
 
 ## Copyright
 
-Copyright (c) 2015 [Karol Bucek](https://github.com/kares). 
+Copyright (c) 2016 [Karol Bucek](https://github.com/kares).
 See LICENSE (http://www.apache.org/licenses/LICENSE-2.0) for details.
 
 [0]: https://secure.travis-ci.org/kares/test-unit-context.png
