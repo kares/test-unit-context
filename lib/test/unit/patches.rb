@@ -10,25 +10,37 @@ module Test::Unit
   end
   TestSuiteCreator.class_eval do
 
+    unless respond_to?(:test_method?)
+      require 'test/unit/attribute' unless Test::Unit.const_defined? :Attribute
+      if Test::Unit::Attribute::ClassMethods.method_defined?(:find_attribute)
+        def self.test_method?(test_case, method_name)
+          method_name = method_name.to_s
+          ( method_name.start_with?('test') && method_name.length > 4 ) ||
+            test_case.find_attribute(method_name, :test)
+        end
+      else
+        def self.test_method?(test_case, method_name)
+          method_name = method_name.to_s
+          ( method_name.start_with?('test') && method_name.length > 4 ) ||
+            test_case.attributes(method_name)[:test]
+        end
+      end
+    end
+
     private
 
     def collect_test_names
       methods = @test_case.public_instance_methods(true)
-      test_case_super = @test_case.superclass
-      while test_case_super && test_case_super != TestCase
-        methods -= test_case_super.public_instance_methods(true)
-        test_case_super = test_case_super.superclass
+      super_test_case = @test_case.superclass
+      while super_test_case && super_test_case != TestCase
+        methods -= super_test_case.public_instance_methods(true)
+        super_test_case = super_test_case.superclass
       end
-      methods.map!(&:to_s)
-      use_find_attribute = @test_case.respond_to?(:find_attribute)
-      test_names = methods.find_all do |method_name|
-        # method_name =~ /^test./
-        ( method_name.start_with?('test') && method_name.length > 4 ) ||
-        ( use_find_attribute ? # since Test-Unit 3.0
-            @test_case.find_attribute(method_name, :test) :
-              @test_case.attributes(method_name)[:test] )
+      method_names = methods.map!(&:to_s)
+      test_names = method_names.find_all do |method_name|
+        self.class.test_method?(@test_case, method_name)
       end
-      send("sort_test_names_in_#{@test_case.test_order}_order", test_names)
+      __send__("sort_test_names_in_#{@test_case.test_order}_order", test_names)
     end
 
   end
