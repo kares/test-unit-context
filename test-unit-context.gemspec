@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require 'test/unit/context/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "test-unit-context"
-  gem.version       = Test::Unit::Context::VERSION
-  gem.authors       = ["Karol Bucek"]
-  gem.email         = ["self@kares.org"]
+  gem.name          = 'test-unit-context'
+  gem.authors       = ['Karol Bucek']
+  gem.email         = ['self@kares.org']
   gem.licenses      = ['Apache-2.0']
+
+  path = File.expand_path("lib/test/unit/context/version.rb", File.dirname(__FILE__))
+  gem.version       = File.read(path).match( /.*VERSION\s*=\s*['"](.*)['"]/m )[1]
 
   gem.summary       = %q{Context for Test::Unit (2.x)}
   gem.description   = %q{Makes Test::Unit::TestCases 'contextable' and thus much
