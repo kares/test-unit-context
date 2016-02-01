@@ -11,6 +11,9 @@ env:
   - TEST_UNIT="~> 2.5"
   - TEST_UNIT="~> 3.0"
   - TEST_UNIT="~> 3.1"
+before_install:
+  - ((ruby -v | grep 1.8.7) && ruby -S gem install bundler -v '~> 1.8.9') || true
+  - ((ruby -v | grep 1.9.3) && ruby -S gem install bundler -v '~> 1.8.9') || true
 matrix:
   include:
     - rvm: 1.8.7
